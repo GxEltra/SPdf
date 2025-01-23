@@ -1,0 +1,107 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>School Web</title>
+    <style>
+        body {
+            background-color: lightyellow;
+            font-family: Arial, sans-serif;
+        }
+        .box {
+            background-color: lightorange;
+            padding: 20px;
+            margin: 10px;
+            border-radius: 5px;
+            text-align: center;
+        }
+        .subject-list {
+            list-style-type: none;
+            padding: 0;
+        }
+        .subject-list li {
+            cursor: pointer;
+        }
+        .pdf-upload {
+            display: none;
+        }
+    </style>
+</head>
+<body>
+
+    <div class="box">
+        <h2>Login</h2>
+        <form id="loginForm">
+            <input type="text" placeholder="Username" value="Mohsin Nafea" required>
+            <input type="password" placeholder="Password" value="Banana10" required>
+            <button type="submit">Login</button>
+        </form>
+    </div>
+
+    <div class="box" id="subjectList" style="display:none;">
+        <h2>Subjects</h2>
+        <ul class="subject-list">
+            <li onclick="openSubject('English')">English</li>
+            <li onclick="openSubject('Math')">Math</li>
+            <li onclick="openSubject('Arabic')">Arabic</li>
+            <li onclick="openSubject('Islamic')">Islamic</li>
+            <li onclick="openSubject('Biology')">Biology</li>
+            <li onclick="openSubject('Physics')">Physics</li>
+            <li onclick="openSubject('Chemistry')">Chemistry</li>
+            <li onclick="openSubject('History')">History</li>
+        </ul>
+    </div>
+
+    <div class="box" id="pdfPage" style="display:none;">
+        <h2 id="subjectTitle"></h2>
+        <input type="file" id="pdfUpload" accept="application/pdf">
+        <button onclick="addPdf()">Add PDF</button>
+        <ul id="pdfList"></ul>
+        <button onclick="goBack()">← Back to Subjects</button>
+    </div>
+
+    <script>
+        document.getElementById('loginForm').onsubmit = function(event) {
+            event.preventDefault();
+            document.getElementById('subjectList').style.display = 'block';
+            document.getElementById('loginForm').parentElement.style.display = 'none';
+        };
+
+        function openSubject(subject) {
+            document.getElementById('subjectTitle').innerText = subject;
+            document.getElementById('pdfPage').style.display = 'block';
+            document.getElementById('subjectList').style.display = 'none';
+        }
+
+        function addPdf() {
+            const fileInput = document.getElementById('pdfUpload');
+            const file = fileInput.files[0];
+            if (file) {
+                const listItem = document.createElement('li');
+                listItem.innerText = file.name;
+                const downloadButton = document.createElement('button');
+                downloadButton.innerText = 'Download';
+                downloadButton.onclick = function() {
+                    const url = URL.createObjectURL(file);
+                    const a = document.createElement('a');
+                    a.href = url;
+                    a.download = file.name;
+                    document.body.appendChild(a);
+                    a.click();
+                    document.body.removeChild(a);
+                };
+                listItem.appendChild(downloadButton);
+                document.getElementById('pdfList').appendChild(listItem);
+                fileInput.value = '';
+            }
+        }
+
+        function goBack() {
+            document.getElementById('pdfPage').style.display = 'none';
+            document.getElementById('subjectList').style.display = 'block';
+        }
+    </script>
+
+</body>
+</html>
